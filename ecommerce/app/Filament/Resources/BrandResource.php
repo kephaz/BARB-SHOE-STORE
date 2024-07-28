@@ -2,33 +2,30 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\CategoryResource\Pages;
-use App\Filament\Resources\CategoryResource\RelationManagers;
-use App\Models\Category;
+use App\Filament\Resources\BrandResource\Pages;
+use App\Filament\Resources\BrandResource\RelationManagers;
+use App\Models\Brand;
+use App\Models\category;
 use Filament\Forms;
-use Filament\Forms\Components\ToggleButtons;
+use Illuminate\Support\Str;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
-use Illuminate\Support\Str;
 use Filament\Forms\Form;
 use Filament\Forms\Set;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Filament\Tables\Columns\ImageColumn;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Livewire\Features\SupportFileUploads\FileUploadComponent;
 
-
-class CategoryResource extends Resource
+class BrandResource extends Resource
 {
-    protected static ?string $model = Category::class;
+    protected static ?string $model = Brand::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-tag';
+    protected static ?string $navigationIcon = 'heroicon-o-computer-desktop';
 
     public static function form(Form $form): Form
     {
@@ -40,7 +37,7 @@ class CategoryResource extends Resource
                             TextInput::make('name')
                                 ->required()
                                 ->maxLength(255)
-                                ->live(onBlur: true) 
+                                ->live(onBlur: true)
                                 ->afterStateUpdated(fn (string $operation, $state, Set $set) => $operation
                                     === 'create' ? $set('slug', Str::slug($state)) : null),
 
@@ -49,23 +46,18 @@ class CategoryResource extends Resource
                                 ->disabled()
                                 ->required()
                                 ->dehydrated()
-                                ->unique(Category::class, 'slug', ignoreRecord: true),
+                                ->unique(Brand::class, 'slug', ignoreRecord: true),
 
                         ]),
-                        
+
                     FileUpload::make('image')
-                    ->image()
-                    ->directory('categories'),
+                        ->image()
+                        ->directory('brand'),
 
-                    Toggle::make('is_active') 
-                    ->required()
-                    ->default(true),
-                ])      
-                        
-                    
-                   
-                            
-
+                    Toggle::make('is_active')
+                        ->required()
+                        ->default(true),
+                ])
             ]);
     }
 
@@ -78,6 +70,7 @@ class CategoryResource extends Resource
                 Tables\Columns\ImageColumn::make('image'),
                 Tables\Columns\TextColumn::make('slug')
                     ->searchable(),
+                
                 Tables\Columns\IconColumn::make('is_active')
                     ->boolean(),
                 Tables\Columns\TextColumn::make('created_at')
@@ -93,7 +86,6 @@ class CategoryResource extends Resource
                 //
             ])
             ->actions([
-                
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
@@ -115,9 +107,9 @@ class CategoryResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListCategories::route('/'),
-            'create' => Pages\CreateCategory::route('/create'),
-            'edit' => Pages\EditCategory::route('/{record}/edit'),
+            'index' => Pages\ListBrands::route('/'),
+            'create' => Pages\CreateBrand::route('/create'),
+            'edit' => Pages\EditBrand::route('/{record}/edit'),
         ];
     }
 }
