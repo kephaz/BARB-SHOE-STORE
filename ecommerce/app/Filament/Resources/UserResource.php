@@ -4,6 +4,8 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\UserResource\Pages;
 use App\Filament\Resources\UserResource\RelationManagers;
+use App\Filament\Resources\UserResource\RelationManagers\OrdersRelationManager;
+use App\Models\Order;
 use App\Models\User;
 use DateTime;
 use Filament\Forms;
@@ -85,9 +87,12 @@ class UserResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            OrdersRelationManager::class
+           
         ];
     }
+        
+    
 
     public static function getPages(): array
     {
